@@ -19,6 +19,15 @@ export default class RNUmengPush {
             cb(param)
         });
     }
+
+    static openNotificationSetting(){
+        UmengPush.openNotificationSetting()
+    }
+    static checkNotification(cb) {
+        UmengPush.checkNotification((result) => {
+            cb(result)
+        });
+    }
     /**
      *  获取SDK的Cid
      *

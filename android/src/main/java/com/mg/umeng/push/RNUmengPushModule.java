@@ -1,7 +1,13 @@
 
 package com.mg.umeng.push;
 
+import android.app.NotificationChannel;
+import android.app.NotificationManager;
 import android.content.Context;
+import android.content.Intent;
+import android.net.Uri;
+import android.os.Build;
+import android.provider.Settings;
 import android.support.annotation.Nullable;
 import android.util.Log;
 
@@ -78,6 +84,88 @@ public class RNUmengPushModule extends ReactContextBaseJavaModule {
         callback.invoke(clientId);
     }
 
+    /**
+     * 开启通知渠道设置
+     */
+    @ReactMethod
+    public void openNotificationSetting() {
+        Context context = getReactApplicationContext();
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
+            boolean check = NotificationUtil.isNotificationEnabled(context);
+            if (check == false) {
+                try {
+                    Intent intent = new Intent();
+                    intent.setAction(Settings.ACTION_APP_NOTIFICATION_SETTINGS);
+                    //这种方案适用于 API 26, 即8.0（含8.0）以上可以用
+                    intent.putExtra(Settings.EXTRA_APP_PACKAGE, context.getPackageName());
+                    intent.putExtra(Settings.EXTRA_CHANNEL_ID, context.getApplicationInfo().uid);
+                    //这种方案适用于 API21——25，即 5.0——7.1 之间的版本可以使用
+                    intent.putExtra("app_package", context.getPackageName());
+                    intent.putExtra("app_uid", context.getApplicationInfo().uid);
+                    context.startActivity(intent);
+                } catch (Exception e) {
+
+                    Intent intent = new Intent();
+                    //下面这种方案是直接跳转到当前应用的设置界面。
+                    intent.setAction(Settings.ACTION_APPLICATION_DETAILS_SETTINGS);
+                    Uri uri = Uri.fromParts("package", context.getPackageName(), null);
+                    intent.setData(uri);
+                    context.startActivity(intent);
+                }
+                return;
+
+            }
+        }
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            NotificationManager mManager = (NotificationManager) context.getSystemService(context.NOTIFICATION_SERVICE);
+            String id = context.getPackageName();
+            NotificationChannel channel = mManager.getNotificationChannel(id);
+
+            Intent intent = new Intent(Settings.ACTION_CHANNEL_NOTIFICATION_SETTINGS);
+            intent.putExtra(Settings.EXTRA_APP_PACKAGE, context.getPackageName());
+            intent.putExtra(Settings.EXTRA_CHANNEL_ID, channel.getId());
+            context.startActivity(intent);
+        }
+    }
+
+    /**
+     * 通知渠道是否开启
+     *
+     * @param callback
+     */
+
+    @ReactMethod
+    public void checkNotification(Callback callback) {
+        boolean needOpen = false;
+        Context context = getReactApplicationContext();
+
+        // areNotificationsEnabled方法的有效性官方只最低支持到API 19，低于19的仍可调用此方法不过只会返回true，即默认为用户已经开启了通知。
+        try {
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
+                boolean check = NotificationUtil.isNotificationEnabled(context);
+                if (check == false) {
+                    callback.invoke(true);
+                    return;
+                }
+            }
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                NotificationManager mManager = (NotificationManager) context.getSystemService(context.NOTIFICATION_SERVICE);
+                String id = context.getPackageName();
+                NotificationChannel channel = mManager.getNotificationChannel(id);
+                if (channel.getImportance() == NotificationManager.IMPORTANCE_NONE) {
+                    needOpen = true;
+                }
+            }
+
+            callback.invoke(needOpen);
+        } catch (Exception e) {
+
+        }
+
+    }
+
     public static void ininPushAgent(Context context, String pushInfo) {
         // 保存pushInfo
         RNUmengPushModule.pushInfo = pushInfo;
@@ -86,7 +174,7 @@ public class RNUmengPushModule extends ReactContextBaseJavaModule {
         mPushAgent.setMessageHandler(new MessageHandler());
         //通知点击事件
         mPushAgent.setNotificationClickHandler(new MyUmengNotificationClickHandler());
-        mPushAgent.setDisplayNotificationNumber(10);
+        mPushAgent.setDisplayNotificationNumber(8);
 
         mPushAgent.register(new IUmengRegisterCallback() {
             @Override
@@ -102,6 +190,8 @@ public class RNUmengPushModule extends ReactContextBaseJavaModule {
         });
         // 初始化厂商推送
         ManufacturerTool.initManufacturer(context, pushInfo);
+
+
     }
 
 
