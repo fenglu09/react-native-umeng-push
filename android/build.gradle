@@ -1,0 +1,50 @@
+apply plugin: 'com.android.library'
+
+
+android {
+    compileSdkVersion 25
+    buildToolsVersion "25.0.2"
+
+    defaultConfig {
+        minSdkVersion 16
+        targetSdkVersion 22
+        versionCode 1
+        versionName "1.0"
+    }
+//    lintOptions {
+//        abortOnError false
+//    }
+
+}
+
+
+dependencies {
+    implementation 'com.facebook.react:react-native:+'
+    implementation 'me.leolin:ShortcutBadger:1.1.8@aar'//角标
+    //PushSDK
+    implementation 'com.umeng.umsdk:push:6.0.1'
+//    implementation 'com.umeng.umsdk:common:2.1.0'
+//    implementation 'com.umeng.umsdk:utdid:1.1.5.3'
+
+    //华为Push通道
+    implementation 'com.umeng.umsdk:huawei-basetb:2.6.3.305'
+    implementation 'com.umeng.umsdk:huawei-pushtb:2.6.3.305'
+    implementation 'com.umeng.umsdk:huawei-umengaccs:1.2.1'
+
+    //Oppo Push通道
+    implementation 'com.umeng.umsdk:oppo-push:1.0.1'
+    implementation 'com.umeng.umsdk:oppo-umengaccs:1.0.3'
+
+    //魅族Push通道
+    implementation 'com.umeng.umsdk:meizu-push:3.8.1'
+    implementation 'com.umeng.umsdk:meizu-umengaccs:1.0.6'
+
+    //小米Push通道
+    implementation 'com.umeng.umsdk:xiaomi-push:3.6.17'
+    implementation 'com.umeng.umsdk:xiaomi-umengaccs:1.1.0'
+
+    //vivo Push通道
+    implementation 'com.umeng.umsdk:vivo-push:2.3.1'
+    implementation 'com.umeng.umsdk:vivo-umengaccs:1.0.4'
+}
+  
