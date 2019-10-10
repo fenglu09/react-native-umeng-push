@@ -2,15 +2,9 @@
 #import "RNUmengPush.h"
 #import <UMPush/UMessage.h>
 
-#if __has_include("RCTBridge.h")
-#import "RCTConvert.h"
-#import "RCTEventDispatcher.h"
-#import "RCTBridge.h"
-#else
 #import <React/RCTConvert.h>
 #import <React/RCTEventDispatcher.h>
 #import <React/RCTBridge.h>
-#endif
 
 @implementation RNUmengPush
 
