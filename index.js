@@ -20,7 +20,7 @@ export default class RNUmengPush {
         });
     }
 
-    static openNotificationSetting(){
+    static openNotificationSetting() {
         UmengPush.openNotificationSetting()
     }
     static checkNotification(cb) {
@@ -51,18 +51,6 @@ export default class RNUmengPush {
     static initPush() {
         UmengPush.initPush()
     }
-    /**
-     * 获取deviceToken
-     * 
-     * @param deviceToken值
-     */
-    // static clientId(callback) {
-    //     UMPushModule.getDeviceToken().then(result => {
-    //         if (callback) {
-    //             callback(result)
-    //         }
-    //     })
-    // }
 
 	/**
 	 *  销毁SDK，并且释放资源

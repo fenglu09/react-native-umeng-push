@@ -15,6 +15,10 @@
 RCT_EXPORT_MODULE()
 @synthesize bridge = _bridge;
 
++(BOOL)requiresMainQueueSetup {
+    return YES;
+}
+
 - (instancetype)init
 {
   self = [super init];
@@ -62,6 +66,8 @@ RCT_EXPORT_MODULE()
 
 -(void)noti_registeClientId:(NSNotification *)notification {
   id obj = [notification object];
+    self.deviceToken = notification.userInfo[@"token"];
+    [[NSUserDefaults standardUserDefaults] setValue:notification.userInfo[@"token"] forKey:@"kUMessageUserDefaultKeyForParams"];
   [self.bridge.eventDispatcher sendAppEventWithName:@"registeClientId"
                                                body:obj];
 }
@@ -232,16 +238,14 @@ RCT_EXPORT_METHOD(deleteAlias:(NSString *)name type:(NSString *)type response:(R
   }];
 }
 
-RCT_REMAP_METHOD(getDeviceToken,
-                 findEventsWithResolver:(RCTPromiseResolveBlock)resolve
-                 rejecter:(RCTPromiseRejectBlock)reject) {
-  NSString *deviceToken = [[NSUserDefaults standardUserDefaults] valueForKey:@"deviceToken"];
+// 返回deviceToken
+RCT_REMAP_METHOD(clientId,
+                 callBack:(RCTResponseSenderBlock)callback) {
+  NSString *deviceToken = [[NSUserDefaults standardUserDefaults] valueForKey:@"kUMessageUserDefaultKeyForParams"];
   if (deviceToken.length > 0) {
-    resolve(deviceToken);
+      callback(@[deviceToken]);
   } else {
-    NSError *error = @"no deviceToken";
-    reject(@"no_events", @"There were no events", error);
-//    resolve(@"0");
+      callback(@[@"0"]);
   }
 }
 
