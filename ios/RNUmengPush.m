@@ -238,9 +238,36 @@ RCT_EXPORT_METHOD(deleteAlias:(NSString *)name type:(NSString *)type response:(R
   }];
 }
 
+// 监测通知是否开启
+RCT_EXPORT_METHOD(checkNotification:(RCTResponseSenderBlock)callback){
+    [[UNUserNotificationCenter currentNotificationCenter] getNotificationSettingsWithCompletionHandler:^(UNNotificationSettings * _Nonnull settings) {
+        if (settings.authorizationStatus == UNAuthorizationStatusNotDetermined){
+            NSLog(@"未选择");
+            callback(@[@"未选择"]);
+        }else if (settings.authorizationStatus == UNAuthorizationStatusDenied){
+            NSLog(@"未授权");
+            callback(@[@"未授权"]);
+        }else if (settings.authorizationStatus == UNAuthorizationStatusAuthorized){
+            NSLog(@"已授权");
+        }
+    }];
+}
+
+// 跳转到通知页面
+RCT_EXPORT_METHOD(openNotificationSetting){
+    UIApplication *application = [UIApplication sharedApplication];
+    NSURL *url = [NSURL URLWithString:UIApplicationOpenSettingsURLString];
+    if ([application canOpenURL:url]) {
+        if ([application respondsToSelector:@selector(openURL:options:completionHandler:)]) {
+            [application openURL:url options:@{} completionHandler:nil];
+        } else {
+            [application openURL:url];
+        }
+    }
+}
+
 // 返回deviceToken
-RCT_REMAP_METHOD(clientId,
-                 callBack:(RCTResponseSenderBlock)callback) {
+RCT_EXPORT_METHOD(clientId:(RCTResponseSenderBlock)callback) {
   NSString *deviceToken = [[NSUserDefaults standardUserDefaults] valueForKey:@"kUMessageUserDefaultKeyForParams"];
   if (deviceToken.length > 0) {
       callback(@[deviceToken]);
