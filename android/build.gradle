@@ -36,8 +36,8 @@ dependencies {
     implementation 'com.umeng.umsdk:oppo-umengaccs:1.0.3'
 
     //魅族Push通道
-    implementation 'com.umeng.umsdk:meizu-push:3.8.1'
-    implementation 'com.umeng.umsdk:meizu-umengaccs:1.0.6'
+    api 'com.umeng.umsdk:meizu-push:3.8.1'
+    api 'com.umeng.umsdk:meizu-umengaccs:1.0.6'
 
     //小米Push通道
     implementation 'com.umeng.umsdk:xiaomi-push:3.6.17'
