@@ -5,6 +5,8 @@ import android.app.AppOpsManager;
 import android.content.Context;
 import android.content.pm.ApplicationInfo;
 import android.os.Build;
+import androidx.annotation.RequiresApi;
+import androidx.core.app.NotificationManagerCompat;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
