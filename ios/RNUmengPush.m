@@ -66,7 +66,6 @@ RCT_EXPORT_MODULE()
 
 -(void)noti_registeClientId:(NSNotification *)notification {
   id obj = [notification object];
-    self.deviceToken = notification.userInfo[@"token"];
     [[NSUserDefaults standardUserDefaults] setValue:notification.userInfo[@"token"] forKey:@"kUMessageUserDefaultKeyForParams"];
   [self.bridge.eventDispatcher sendAppEventWithName:@"registeClientId"
                                                body:obj];
@@ -253,7 +252,7 @@ RCT_EXPORT_METHOD(checkNotification:(RCTResponseSenderBlock)callback){
     }];
 }
 
-// 跳转到通知页面
+// 跳转到通知设置页面
 RCT_EXPORT_METHOD(openNotificationSetting){
     UIApplication *application = [UIApplication sharedApplication];
     NSURL *url = [NSURL URLWithString:UIApplicationOpenSettingsURLString];
