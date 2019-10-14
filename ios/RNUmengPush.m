@@ -2,15 +2,9 @@
 #import "RNUmengPush.h"
 #import <UMPush/UMessage.h>
 
-#if __has_include("RCTBridge.h")
-#import "RCTConvert.h"
-#import "RCTEventDispatcher.h"
-#import "RCTBridge.h"
-#else
 #import <React/RCTConvert.h>
 #import <React/RCTEventDispatcher.h>
 #import <React/RCTBridge.h>
-#endif
 
 @implementation RNUmengPush
 
@@ -20,6 +14,10 @@
 }
 RCT_EXPORT_MODULE()
 @synthesize bridge = _bridge;
+
++(BOOL)requiresMainQueueSetup {
+    return YES;
+}
 
 - (instancetype)init
 {
@@ -68,6 +66,7 @@ RCT_EXPORT_MODULE()
 
 -(void)noti_registeClientId:(NSNotification *)notification {
   id obj = [notification object];
+    [[NSUserDefaults standardUserDefaults] setValue:notification.userInfo[@"token"] forKey:@"kUMessageUserDefaultKeyForParams"];
   [self.bridge.eventDispatcher sendAppEventWithName:@"registeClientId"
                                                body:obj];
 }
@@ -238,16 +237,41 @@ RCT_EXPORT_METHOD(deleteAlias:(NSString *)name type:(NSString *)type response:(R
   }];
 }
 
-RCT_REMAP_METHOD(getDeviceToken,
-                 findEventsWithResolver:(RCTPromiseResolveBlock)resolve
-                 rejecter:(RCTPromiseRejectBlock)reject) {
-  NSString *deviceToken = [[NSUserDefaults standardUserDefaults] valueForKey:@"deviceToken"];
+// 监测通知是否开启
+RCT_EXPORT_METHOD(checkNotification:(RCTResponseSenderBlock)callback){
+    [[UNUserNotificationCenter currentNotificationCenter] getNotificationSettingsWithCompletionHandler:^(UNNotificationSettings * _Nonnull settings) {
+        if (settings.authorizationStatus == UNAuthorizationStatusNotDetermined){
+            NSLog(@"未选择");
+            callback(@[@"未选择"]);
+        }else if (settings.authorizationStatus == UNAuthorizationStatusDenied){
+            NSLog(@"未授权");
+            callback(@[@"未授权"]);
+        }else if (settings.authorizationStatus == UNAuthorizationStatusAuthorized){
+            NSLog(@"已授权");
+        }
+    }];
+}
+
+// 跳转到通知设置页面
+RCT_EXPORT_METHOD(openNotificationSetting){
+    UIApplication *application = [UIApplication sharedApplication];
+    NSURL *url = [NSURL URLWithString:UIApplicationOpenSettingsURLString];
+    if ([application canOpenURL:url]) {
+        if ([application respondsToSelector:@selector(openURL:options:completionHandler:)]) {
+            [application openURL:url options:@{} completionHandler:nil];
+        } else {
+            [application openURL:url];
+        }
+    }
+}
+
+// 返回deviceToken
+RCT_EXPORT_METHOD(clientId:(RCTResponseSenderBlock)callback) {
+  NSString *deviceToken = [[NSUserDefaults standardUserDefaults] valueForKey:@"kUMessageUserDefaultKeyForParams"];
   if (deviceToken.length > 0) {
-    resolve(deviceToken);
+      callback(@[deviceToken]);
   } else {
-    NSError *error = @"no deviceToken";
-    reject(@"no_events", @"There were no events", error);
-//    resolve(@"0");
+      callback(@[@"0"]);
   }
 }
 

@@ -11,8 +11,14 @@
 
 ### Manual installation
 
-
 #### iOS
+
+##### cocoapods 集成友盟SDK
+```
+ pod 'UMCCommon'
+ pod 'UMCPush'
+ pod 'UMCSecurityPlugins'
+```
 
 1. In XCode, in the project navigator, right click `Libraries` ➜ `Add Files to [your project's name]`
 2. Go to `node_modules` ➜ `react-native-umeng-push` and add `RNUmengPush.xcodeproj`
