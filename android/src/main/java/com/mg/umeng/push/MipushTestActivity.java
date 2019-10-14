@@ -1,6 +1,9 @@
 package com.mg.umeng.push;
 
+import android.app.NotificationManager;
+import android.content.Context;
 import android.content.Intent;
+import android.util.Log;
 
 import com.facebook.react.bridge.Arguments;
 import com.facebook.react.bridge.WritableMap;
@@ -12,7 +15,7 @@ import org.json.JSONObject;
 import java.util.Iterator;
 
 public class MipushTestActivity extends UmengNotifyClickActivity {
-    private static String TAG = "MeizuTestReceiver";
+    private static String TAG = "MipushTestActivity";
     public static WritableMap param = null;
 //    @Override
 //    protected void onCreate(Bundle bundle) {
@@ -22,6 +25,7 @@ public class MipushTestActivity extends UmengNotifyClickActivity {
 
     @Override
     public void onMessage(Intent intent) {
+        Log.d("MipushTestActivity","-onMessage-");
         super.onMessage(intent);  //此方法必须调用，否则无法统计打开数
         String body = intent.getStringExtra(AgooConstants.MESSAGE_BODY);
         try {
@@ -35,6 +39,8 @@ public class MipushTestActivity extends UmengNotifyClickActivity {
                 String value = extra.getString(key);
                 param.putString(key, value);
             }
+            NotificationManager mNotifyManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
+            mNotifyManager.cancelAll();
 
             Intent LaunchIntent = getPackageManager().getLaunchIntentForPackage(getApplication().getPackageName());
             LaunchIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);

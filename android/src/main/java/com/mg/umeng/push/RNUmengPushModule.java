@@ -21,6 +21,8 @@ import com.facebook.react.modules.core.DeviceEventManagerModule;
 import com.umeng.message.IUmengRegisterCallback;
 import com.umeng.message.PushAgent;
 
+import androidx.annotation.Nullable;
+
 
 public class RNUmengPushModule extends ReactContextBaseJavaModule {
 
@@ -49,9 +51,7 @@ public class RNUmengPushModule extends ReactContextBaseJavaModule {
      */
     @ReactMethod
     public void initPush() {
-        if (clientId == null) {
-            ininPushAgent(getReactApplicationContext(), pushInfo);
-        }
+        ininPushAgent(getReactApplicationContext(), pushInfo);
     }
 
     /**
@@ -204,6 +204,10 @@ public class RNUmengPushModule extends ReactContextBaseJavaModule {
 
     @ReactMethod
     public void ManufacturerCallback(Callback callback) {
+        if (MipushTestActivity.param == null) {
+            callback.invoke(false);
+            return;
+        }
         callback.invoke(MipushTestActivity.param);
         MipushTestActivity.param = null;
     }
