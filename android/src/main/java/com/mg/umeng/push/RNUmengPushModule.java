@@ -10,8 +10,6 @@ import android.os.Build;
 import android.provider.Settings;
 import android.util.Log;
 
-import androidx.annotation.Nullable;
-
 import com.facebook.react.bridge.Callback;
 import com.facebook.react.bridge.ReactApplicationContext;
 import com.facebook.react.bridge.ReactContextBaseJavaModule;
@@ -62,8 +60,10 @@ public class RNUmengPushModule extends ReactContextBaseJavaModule {
 
     @ReactMethod
     public void clearAllNotifications() {
-//        NotificationManager manager = (NotificationManager) getReactApplicationContext().getSystemService(Context.NOTIFICATION_SERVICE);
-//        manager.cancelAll();
+        Log.d("clearAllNotifications", "-clearAllNotifications-");
+
+        NotificationManager manager = (NotificationManager) getReactApplicationContext().getSystemService(Context.NOTIFICATION_SERVICE);
+        manager.cancelAll();
     }
 
 
@@ -167,7 +167,7 @@ public class RNUmengPushModule extends ReactContextBaseJavaModule {
 
     }
 
-    public static void ininPushAgent(Context context, String pushInfo) {
+    public static void ininPushAgent(final Context context, String pushInfo) {
         // 保存pushInfo
         RNUmengPushModule.pushInfo = pushInfo;
         PushAgent mPushAgent = PushAgent.getInstance(context);
@@ -189,10 +189,9 @@ public class RNUmengPushModule extends ReactContextBaseJavaModule {
                 Log.d(TAG, s);
             }
         });
+        
         // 初始化厂商推送
         ManufacturerTool.initManufacturer(context, pushInfo);
-
-
     }
 
 
@@ -204,12 +203,12 @@ public class RNUmengPushModule extends ReactContextBaseJavaModule {
 
     @ReactMethod
     public void ManufacturerCallback(Callback callback) {
-        if (MipushTestActivity.param == null) {
+        if (UmengPushActivity.param == null) {
             callback.invoke(false);
             return;
         }
-        callback.invoke(MipushTestActivity.param);
-        MipushTestActivity.param = null;
+        callback.invoke(UmengPushActivity.param);
+        UmengPushActivity.param = null;
     }
 
     public static void sendEvent(String eventName, @Nullable WritableMap params) {

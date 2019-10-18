@@ -7,8 +7,6 @@ import android.content.Context;
 import android.text.TextUtils;
 import android.util.Log;
 
-import com.huawei.android.hms.agent.HMSAgent;
-
 import org.android.agoo.huawei.HuaWeiRegister;
 import org.android.agoo.mezu.MeizuRegister;
 import org.android.agoo.oppo.OppoRegister;
