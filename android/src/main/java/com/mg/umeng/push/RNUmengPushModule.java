@@ -25,7 +25,6 @@ import androidx.annotation.Nullable;
 public class RNUmengPushModule extends ReactContextBaseJavaModule {
 
     public static String pushInfo = "";
-    public static String ChannelName = "蘑菇圈ICRM通知";
 
 
     public final static String TAG = "RNUmengPushModule";
@@ -176,7 +175,7 @@ public class RNUmengPushModule extends ReactContextBaseJavaModule {
         //监听消息返回
         mPushAgent.setMessageHandler(new MessageHandler());
         //通知点击事件
-        mPushAgent.setNotificationChannelName(ChannelName);
+//        mPushAgent.setNotificationChannelName(PushInfo.ChannelName);
         mPushAgent.setNotificationClickHandler(new MyUmengNotificationClickHandler());
         mPushAgent.setDisplayNotificationNumber(8);
 
@@ -192,7 +191,7 @@ public class RNUmengPushModule extends ReactContextBaseJavaModule {
                 Log.d(TAG, s);
             }
         });
-        
+
         // 初始化厂商推送
         ManufacturerTool.initManufacturer(context, pushInfo);
     }
