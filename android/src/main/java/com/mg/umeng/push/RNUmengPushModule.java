@@ -26,6 +26,7 @@ public class RNUmengPushModule extends ReactContextBaseJavaModule {
 
     public static String pushInfo = "";
 
+
     public final static String TAG = "RNUmengPushModule";
     public static String clientId = null;
     //    public final ReactApplicationContext reactContext;
@@ -174,6 +175,7 @@ public class RNUmengPushModule extends ReactContextBaseJavaModule {
         //监听消息返回
         mPushAgent.setMessageHandler(new MessageHandler());
         //通知点击事件
+//        mPushAgent.setNotificationChannelName(PushInfo.ChannelName);
         mPushAgent.setNotificationClickHandler(new MyUmengNotificationClickHandler());
         mPushAgent.setDisplayNotificationNumber(8);
 
@@ -189,7 +191,7 @@ public class RNUmengPushModule extends ReactContextBaseJavaModule {
                 Log.d(TAG, s);
             }
         });
-        
+
         // 初始化厂商推送
         ManufacturerTool.initManufacturer(context, pushInfo);
     }

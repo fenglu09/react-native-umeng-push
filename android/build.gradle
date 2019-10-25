@@ -22,7 +22,7 @@ dependencies {
     implementation 'com.facebook.react:react-native:+'
     implementation 'me.leolin:ShortcutBadger:1.1.8@aar'//角标
     //PushSDK
-    implementation 'com.umeng.umsdk:push:6.0.1'
+    api 'com.umeng.umsdk:push:6.0.1'
 //    implementation 'com.umeng.umsdk:common:2.1.0'
 //    implementation 'com.umeng.umsdk:utdid:1.1.5.3'
 
