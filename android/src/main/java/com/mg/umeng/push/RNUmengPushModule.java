@@ -128,6 +128,7 @@ public class RNUmengPushModule extends ReactContextBaseJavaModule {
             Intent intent = new Intent(Settings.ACTION_CHANNEL_NOTIFICATION_SETTINGS);
             intent.putExtra(Settings.EXTRA_APP_PACKAGE, context.getPackageName());
             intent.putExtra(Settings.EXTRA_CHANNEL_ID, channel.getId());
+            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK );// add by david at 2019-11-21
             context.startActivity(intent);
         }
     }
