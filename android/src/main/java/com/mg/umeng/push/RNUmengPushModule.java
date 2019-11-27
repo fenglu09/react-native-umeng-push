@@ -105,6 +105,8 @@ public class RNUmengPushModule extends ReactContextBaseJavaModule {
                     //这种方案适用于 API21——25，即 5.0——7.1 之间的版本可以使用
                     intent.putExtra("app_package", context.getPackageName());
                     intent.putExtra("app_uid", context.getApplicationInfo().uid);
+                    intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK );// add by david at 2019-11-27
+
                     context.startActivity(intent);
                 } catch (Exception e) {
 
@@ -113,6 +115,8 @@ public class RNUmengPushModule extends ReactContextBaseJavaModule {
                     intent.setAction(Settings.ACTION_APPLICATION_DETAILS_SETTINGS);
                     Uri uri = Uri.fromParts("package", context.getPackageName(), null);
                     intent.setData(uri);
+                    intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK );// add by david at 2019-11-27
+
                     context.startActivity(intent);
                 }
                 return;
