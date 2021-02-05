@@ -65,6 +65,7 @@ public class RNUmengPushModule extends ReactContextBaseJavaModule {
 
         NotificationManager manager = (NotificationManager) getReactApplicationContext().getSystemService(Context.NOTIFICATION_SERVICE);
         manager.cancelAll();
+        BadgenumberUtils.clearAll(getCurrentActivity());
     }
 
 
