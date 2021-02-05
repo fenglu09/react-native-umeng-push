@@ -26,6 +26,8 @@ public class MessageHandler extends UmengMessageHandler {
     @Override
     public Notification getNotification(Context context, UMessage msg) {
         try {
+            BadgenumberUtils.setBadgenumber(context);
+
             Map<String, String> map = msg.extra;
             if (map != null) {
 
