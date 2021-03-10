@@ -6,14 +6,16 @@ import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Build;
-import androidx.core.app.NotificationCompat;
-
 import android.util.Log;
 
+import com.facebook.react.bridge.Arguments;
+import com.facebook.react.bridge.WritableMap;
 import com.umeng.message.UmengMessageHandler;
 import com.umeng.message.entity.UMessage;
 
 import java.util.Map;
+
+import androidx.core.app.NotificationCompat;
 
 
 /**
@@ -22,6 +24,22 @@ import java.util.Map;
 
 public class MessageHandler extends UmengMessageHandler {
     public String TAG = "MessageHandler";
+    public static final String EVENT_RECEIVE_NOTIFICATION_ARRIVAL = "arrivalNotification";
+
+
+    public void arrivalRemoteNotification(Map<String, String> map) {
+        try {
+            WritableMap param = Arguments.createMap();
+            for (String key : map.keySet()) {
+                String value = map.get(key).toString();
+                param.putString(key, value);
+            }
+
+            RNUmengPushModule.sendEvent(EVENT_RECEIVE_NOTIFICATION_ARRIVAL, param);
+            return;
+        } catch (Exception e) {
+        }
+    }
 
     @Override
     public Notification getNotification(Context context, UMessage msg) {
@@ -30,6 +48,8 @@ public class MessageHandler extends UmengMessageHandler {
 
             Map<String, String> map = msg.extra;
             if (map != null) {
+                arrivalRemoteNotification(map);//udesk推送消息监听发送
+
 
                 Resources res = context.getResources();
                 String packageName = context.getPackageName();
